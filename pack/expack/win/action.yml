@@ -1,0 +1,45 @@
+name: Sign Software Package ( Windows )
+description: Sign the .MSI .EXE of Windows Package
+
+inputs:
+  code_sign_key:
+    required: true
+  code_sign_crt:
+    required: true
+  pass:
+    required: true
+  out_path:
+    required: true
+
+runs:
+  using: composite
+
+  steps:
+    - name: Prepare to Sign
+      working-directory: ${{ inputs.out_path }}
+      shell: pwsh
+      run: |
+        Set-Content -Path codesign.key -Value "${{ inputs.code_sign_key }}"
+        Set-Content -Path codesign.crt -Value "${{ inputs.code_sign_crt }}"
+        Set-Content -Path intermediate.crt -Value "${{ inputs.pass }}"
+        openssl pkcs12 -export -inkey codesign.key `
+          -in codesign.crt `
+          -certfile intermediate.crt `
+          -out codesign.pfx `
+          -passout pass:$INPUT_PASS
+
+    - name: Sign Software
+      working-directory: ${{ inputs.out_path }}
+      shell: pwsh
+      run: |
+        signtool sign /f codesign.pfx `
+          /p ${{ inputs.pass }} `
+          /fd SHA256 `
+          /tr http://timestamp.digicert.com `
+          /td SHA256 *.msi
+        signtool sign /f codesign.pfx `
+          /p ${{ inputs.pass }} `
+          /fd SHA256 `
+          /tr http://timestamp.digicert.com `
+          /td SHA256 *.exe
+        Remove-Item codesign*

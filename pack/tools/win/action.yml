@@ -5,7 +5,7 @@ runs:
   using: composite
 
   steps:
-    - name: Prepare Tools ( Windows )
+    - name: Prepare Tools
       if: runner.os == 'Windows'
       shell: pwsh
       run: |
@@ -13,6 +13,6 @@ runs:
         dotnet tool install --global wix --version 4.0.4
         wix extension add --global WixToolset.UI.wixext/4.0.4
 
-    - name: Install Windows SDK ( Windows )
+    - name: Install Windows SDK
       if: runner.os == 'Windows'
       uses: ilammy/msvc-dev-cmd@v1
