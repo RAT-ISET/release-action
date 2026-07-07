@@ -17,7 +17,7 @@ runs:
       run: |
         tree ${{ inputs.out_path }}/out
         mkdir ${{ github.workspace }}/tmp
-        cp -a pkg.sh ./${{ github.workspace }}/tmp
+        cp -a pkg.sh ${{ github.workspace }}/tmp
         docker build -f Dockerfile \
           --secret id=gpg_key,env=GPG_KEY \
           --build-arg OUT_PATH=${{ inputs.out_path }} \
