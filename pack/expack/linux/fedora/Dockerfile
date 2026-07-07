@@ -22,6 +22,7 @@ WORKDIR /home/builder/out/dist/
 
 RUN --mount=type=secret,id=gpg_key \
     cat /run/secrets/gpg_key | base64 -d > /tmp/private.key && \
+    wc -c /tmp/private.key && \
     gpg --batch --import /tmp/private.key && \
     rm /tmp/private.key && \
     rpm --addsign --define "_gpg_name ${GPG_KEY_ID}" *.rpm
