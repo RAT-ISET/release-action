@@ -13,22 +13,27 @@ runs:
   steps:
     - name: Prepare to Sign
       shell: bash
-      run: echo "${{ inputs.gpg_key }}" | gpg --import
+      run: |
+        echo "${{ inputs.gpg_key }}" | gpg --import
 
-    - name: Package for Arch ( Linux )
+    - name: Package for Fedora
+      working-directory: ${{ github.action_path }}/fedora
+      shell: bash
+      run: |
+        tree ${{ inputs.out_path }}
+        docker build -f Dockerfile \
+          --build-arg GPG_KEY=${{ inputs.gpg_key }} \
+          --build-arg OUT_PATH=${{ inputs.out_path }} \
+          --build-arg SOURCE_PATH=${{ github.workspace }} \
+          --output type=local,dest=${{ inputs.out_path }}/out/dist .
+
+    - name: Package for Arch
       working-directory: ${{ github.action_path }}/arch
       shell: bash
       run: |
-        find ${{ inputs.out_path }} -print
+        tree ${{ inputs.out_path }}
         mkdir tmp
         cp pkg.sh ./tmp/
         cp ${{ inputs.out_path }}/build/PKGBUILD ./tmp/
         cp -a ${{ inputs.out_path }}/out/install/ ./tmp/install/
         docker build -f Dockerfile --output type=local,dest=${{ inputs.out_path }}/out/dist .
-
-    - name: Sign Software
-      shell: bash
-      working-directory: ${{ inputs.out_path }}/out/dist
-      run: |
-        KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | awk '/sec/{print $2}' | cut -d'/' -f2)
-        rpm --addsign --define "_gpg_name $KEY_ID" *.rpm

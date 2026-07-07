@@ -9,4 +9,4 @@ runs:
       shell: bash
       run: |
         sudo apt update
-        sudo apt install rpm gnupg -y
+        sudo apt install tree -y
