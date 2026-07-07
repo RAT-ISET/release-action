@@ -5,7 +5,7 @@ ARG OUT_PATH
 
 CMD ["/bin/bash"]
 
-RUN dnf install -y rpm-build cmake gcc gcc-c++ base-devel gnupg2 && \
+RUN dnf install -y rpm-build cmake gcc gcc-c++ gnupg2 && \
     useradd -m builder
 
 USER builder
