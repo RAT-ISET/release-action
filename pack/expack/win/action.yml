@@ -16,7 +16,7 @@ runs:
 
   steps:
     - name: Prepare to Sign
-      working-directory: ${{ inputs.out_path }}
+      working-directory: ${{ inputs.out_path }}/out/dist
       shell: pwsh
       run: |
         Set-Content -Path codesign.key -Value "${{ inputs.code_sign_key }}"
@@ -29,7 +29,7 @@ runs:
           -passout pass:$INPUT_PASS
 
     - name: Sign Software
-      working-directory: ${{ inputs.out_path }}
+      working-directory: ${{ inputs.out_path }}/out/dist
       shell: pwsh
       run: |
         signtool sign /f codesign.pfx `
