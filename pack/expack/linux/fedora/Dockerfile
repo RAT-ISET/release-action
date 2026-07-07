@@ -24,7 +24,7 @@ RUN --mount=type=secret,id=gpg_key \
     cat /run/secrets/gpg_key | base64 -d > /tmp/private.key && \
     gpg --batch --import /tmp/private.key && \
     rm /tmp/private.key && \
-    rpm --addsign --define "_gpg_name ${KEY_ID}" *.rpm
+    rpm --addsign --define "_gpg_name ${GPG_KEY_ID}" *.rpm
 
 FROM scratch AS exporter
 COPY --from=0 *.rpm /
