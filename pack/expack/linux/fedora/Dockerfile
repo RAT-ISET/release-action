@@ -22,4 +22,4 @@ RUN --mount=type=secret,id=gpg_key \
     rm /tmp/private.key
 
 FROM scratch AS exporter
-COPY --from=0 ${OUT_PATH}/*.rpm /
+COPY --from=0 *.rpm /
