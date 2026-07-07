@@ -8,4 +8,5 @@ cmake -S . -B build \
     -DCPACK_DOCKER_GENERATOR=RPM
 
 cmake --build build --config Release --target install
+cd build
 cpack -C Release -G RPM
