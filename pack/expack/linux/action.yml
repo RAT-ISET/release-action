@@ -20,9 +20,9 @@ runs:
       working-directory: ${{ github.action_path }}/fedora
       shell: bash
       run: |
-        tree ${{ inputs.out_path }}
+        tree ${{ inputs.out_path }}/out
         docker build -f Dockerfile \
-          --build-arg GPG_KEY=${{ inputs.gpg_key }} \
+          --secret id=gpg_key,env=GPG_KEY
           --build-arg OUT_PATH=${{ inputs.out_path }} \
           --build-arg SOURCE_PATH=${{ github.workspace }} \
           --output type=local,dest=${{ inputs.out_path }}/out/dist .
@@ -31,7 +31,7 @@ runs:
       working-directory: ${{ github.action_path }}/arch
       shell: bash
       run: |
-        tree ${{ inputs.out_path }}
+        tree ${{ inputs.out_path }}/out
         mkdir tmp
         cp pkg.sh ./tmp/
         cp ${{ inputs.out_path }}/build/PKGBUILD ./tmp/
