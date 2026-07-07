@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-make -S . -B build \
+cmake -S . -B build \
     -DCMAKE_BUILD_TYPE=Release \
     -DCPACK_DOCKER_GENERATOR=RPM
 
