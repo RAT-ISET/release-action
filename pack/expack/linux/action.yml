@@ -4,6 +4,8 @@ description: Sign or Pack the .DEB .ZST(Arch) .RPM .TAR.GZ of Linux Package
 inputs:
   gpg_key:
     required: true
+  gpg_key_id:
+    required: true
   out_path:
     required: true
 
@@ -20,6 +22,7 @@ runs:
         cp -a pkg.sh ${{ github.workspace }}/tmp
         docker build -f Dockerfile \
           --secret id=gpg_key,env=GPG_KEY \
+          --build-arg GPG_KEY_ID=${{ inputs.gpg_key_id }} \
           --build-arg OUT_PATH=${{ inputs.out_path }} \
           --output type=local,dest=${{ inputs.out_path }}/out/dist ${{ github.workspace }}
         rm -rf ${{ github.workspace }}/tmp

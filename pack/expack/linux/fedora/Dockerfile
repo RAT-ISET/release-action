@@ -2,6 +2,7 @@ FROM fedora:latest
 LABEL authors="Rangeset"
 
 ARG OUT_PATH
+ARG GPG_KEY_ID
 
 CMD ["/bin/bash"]
 
@@ -20,11 +21,10 @@ USER root
 WORKDIR /home/builder/out/dist/
 
 RUN --mount=type=secret,id=gpg_key \
-    cat /run/secrets/gpg_key > /tmp/private.key && \
-    gpg --import /tmp/private.key && \
+    cat /run/secrets/gpg_key | base64 -d > /tmp/private.key && \
+    gpg --batch --import /tmp/private.key && \
     rm /tmp/private.key && \
-    KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | awk '/sec/{print $2}' | cut -d'/' -f2) && \
-    rpm --addsign --define "_gpg_name $KEY_ID" *.rpm
+    rpm --addsign --define "_gpg_name ${KEY_ID}" *.rpm
 
 FROM scratch AS exporter
 COPY --from=0 *.rpm /
