@@ -16,10 +16,15 @@ COPY --chown=builder:builder ./tmp/pkg.sh ./
 
 RUN bash pkg.sh
 
+USER root
+WORKDIR /home/builder/out/dist/
+
 RUN --mount=type=secret,id=gpg_key \
     cat /run/secrets/gpg_key > /tmp/private.key && \
     gpg --import /tmp/private.key && \
-    rm /tmp/private.key
+    rm /tmp/private.key && \
+    KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | awk '/sec/{print $2}' | cut -d'/' -f2) && \
+    rpm --addsign --define "_gpg_name $KEY_ID" *.rpm
 
 FROM scratch AS exporter
 COPY --from=0 *.rpm /
