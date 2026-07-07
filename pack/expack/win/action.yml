@@ -10,6 +10,8 @@ inputs:
     required: true
   out_path:
     required: true
+  intermediate_crt:
+    required: true
 
 runs:
   using: composite
@@ -21,12 +23,12 @@ runs:
       run: |
         Set-Content -Path codesign.key -Value "${{ inputs.code_sign_key }}"
         Set-Content -Path codesign.crt -Value "${{ inputs.code_sign_crt }}"
-        Set-Content -Path intermediate.crt -Value "${{ inputs.pass }}"
+        Set-Content -Path intermediate.crt -Value "${{ inputs.intermediate_crt }}"
         openssl pkcs12 -export -inkey codesign.key `
           -in codesign.crt `
           -certfile intermediate.crt `
           -out codesign.pfx `
-          -passout pass:$INPUT_PASS
+          -passout pass:${{ inputs.pass }}
 
     - name: Sign Software
       working-directory: ${{ inputs.out_path }}/out/dist
