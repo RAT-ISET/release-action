@@ -18,14 +18,14 @@ runs:
       shell: bash
       env:
         GPG_KEY: ${{ inputs.gpg_key }}
+        GPG_KEY_ID: ${{ inputs.gpg_key_id }}
       run: |
         tree ${{ inputs.out_path }}/out
         mkdir ${{ github.workspace }}/tmp
         cp -a pkg.sh ${{ github.workspace }}/tmp
         docker build -f Dockerfile \
           --secret id=gpg_key,env=GPG_KEY \
-          --build-arg GPG_KEY_ID=${{ inputs.gpg_key_id }} \
-          --build-arg OUT_PATH=${{ inputs.out_path }} \
+          --secret id=gpg_key_id,env=GPG_KEY_ID \
           --output type=local,dest=${{ inputs.out_path }}/out/dist ${{ github.workspace }}
         rm -rf ${{ github.workspace }}/tmp
 

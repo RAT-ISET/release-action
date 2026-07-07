@@ -1,9 +1,6 @@
 FROM fedora:latest
 LABEL authors="Rangeset"
 
-ARG OUT_PATH
-ARG GPG_KEY_ID
-
 CMD ["/bin/bash"]
 
 RUN dnf install -y rpm-build rpm-sign cmake gcc gcc-c++ gnupg2 git && \
@@ -21,11 +18,13 @@ USER root
 WORKDIR /home/builder/out/dist/
 
 RUN --mount=type=secret,id=gpg_key \
+    --mount=type=secret,id=gpg_key_id \
     cat /run/secrets/gpg_key | base64 -d > /tmp/private.key && \
     wc -c /tmp/private.key && \
     gpg --batch --import /tmp/private.key && \
     rm /tmp/private.key && \
-    rpmsign --addsign --define "_gpg_name ${GPG_KEY_ID}" *.rpm
+    GPG_KEY_ID=$(cat /run/secrets/gpg_key_id) && \
+    rpmsign --addsign --define "_gpg_name $GPG_KEY_ID" *.rpm
 
 FROM scratch AS exporter
-COPY --from=0 *.rpm /
+COPY --from=0 /home/builder/out/dist/*.rpm /
