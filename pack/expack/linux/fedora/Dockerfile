@@ -2,7 +2,6 @@ FROM rockylinux:9
 LABEL authors="Rangeset"
 
 ARG OUT_PATH
-ARG SOURCE_PATH
 
 CMD ["/bin/bash"]
 
@@ -12,10 +11,10 @@ RUN dnf install -y rpm-build cmake gcc gnupg2 && \
 USER builder
 WORKDIR /home/builder
 
-COPY --chown=builder:builder ${SOURCE_PATH}/ ./
-COPY --chown=builder:builder ./pkg.sh ./
+COPY --chown=builder:builder ./ ./
+COPY --chown=builder:builder ./tmp/pkg.sh ./
 
-RUN GPG_KEY=${GPG_KEY} OUT_PATH=${OUT_PATH} bash pkg.sh
+RUN bash pkg.sh
 
 RUN --mount=type=secret,id=gpg_key \
     cat /run/secrets/gpg_key > /tmp/private.key && \
