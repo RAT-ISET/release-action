@@ -1,4 +1,4 @@
-FROM rockylinux:9
+FROM fedora:latest
 LABEL authors="Rangeset"
 
 ARG OUT_PATH
