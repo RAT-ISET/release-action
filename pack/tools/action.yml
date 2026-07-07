@@ -7,8 +7,8 @@ runs:
   steps:
     - name: Prepare the Tools ( Linux )
       if: runner.os == 'Linux'
-      uses: RAT-ISET/release-action/pack/tools/linux
+      uses: RAT-ISET/release-action/pack/tools/linux@main
 
     - name: Prepare the Tools ( Windows )
       if: runner.os == 'Windows'
-      uses: RAT-ISET/release-action/pack/tools/win
+      uses: RAT-ISET/release-action/pack/tools/win@main
