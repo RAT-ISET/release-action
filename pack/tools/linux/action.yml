@@ -1,0 +1,12 @@
+name: Prepare the Tools ( Linux )
+description: Prepare the Tools for CPack
+
+runs:
+  using: composite
+
+  steps:
+    - name: Prepare Tools ( Linux )
+      shell: bash
+      run: |
+        sudo apt update
+        sudo apt install rpm gnupg -y

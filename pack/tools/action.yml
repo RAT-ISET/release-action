@@ -1,0 +1,14 @@
+name: Prepare the Tools
+description: Prepare the Tools for CPack
+
+runs:
+  using: composite
+
+  steps:
+    - name: Prepare the Tools ( Linux )
+      if: runner.os == 'Linux'
+      uses: RAT-ISET/release-action/pack/tools/linux
+
+    - name: Prepare the Tools ( Windows )
+      if: runner.os == 'Windows'
+      uses: RAT-ISET/release-action/pack/tools/win

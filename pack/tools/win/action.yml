@@ -1,0 +1,18 @@
+name: Prepare the Tools ( Windows )
+description: Prepare the Tools for CPack
+
+runs:
+  using: composite
+
+  steps:
+    - name: Prepare Tools ( Windows )
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        choco install openssl nsis -y
+        dotnet tool install --global wix --version 4.0.4
+        wix extension add --global WixToolset.UI.wixext/4.0.4
+
+    - name: Install Windows SDK ( Windows )
+      if: runner.os == 'Windows'
+      uses: ilammy/msvc-dev-cmd@v1
