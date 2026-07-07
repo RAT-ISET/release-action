@@ -22,7 +22,7 @@ runs:
       uses: RAT-ISET/release-action/pack/expack/linux@main
       with:
         gpg_key: ${{ inputs.gpg_key }}
-        out_path: ${{ inputs.pass }}
+        out_path: ${{ inputs.out_path }}
 
     - name: Sign Software Package ( Windows )
       if: runner.os == 'Windows'
@@ -31,4 +31,4 @@ runs:
         code_sign_crt: ${{ inputs.code_sign_crt }}
         code_sign_key: ${{ inputs.code_sign_key }}
         pass: ${{ inputs.pass }}
-        out_path: ${{ inputs.pass }}
+        out_path: ${{ inputs.out_path }}
