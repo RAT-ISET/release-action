@@ -1,24 +1,23 @@
-FROM fedora:latest
+FROM archlinux:latest
 LABEL authors="Rangeset"
 
-ARG RPM_REPOS_PATH
+ARG ARCH_REPOS_PATH
+ARG SOFTWARE_NAME
 
 CMD ["/bin/bash"]
 
-RUN dnf install -y git createrepo_c && useradd -m builder
+RUN pacman -S pacman-contrib repo-add
 
 RUN --mount=type=secret,id=gpg_key \
     --mount=type=secret,id=gpg_key_id \
     --mount=target=/src \
-    cp -a /src/incoming/rpm/* /src/rpm/ && \
-    createrepo_c --update ${RPM_REPOS_PATH} \
     cat /run/secrets/gpg_key | base64 -d > /tmp/private.key && \
     wc -c /tmp/private.key && \
     gpg --batch --import /tmp/private.key && \
     rm /tmp/private.key && \
     GPG_KEY_ID=$(cat /run/secrets/gpg_key_id) && \
-    gpg --detach-sign \
-        --armor --batch --yes \
-        -u ${GPG_KEY_ID} \
-        -o ${RPM_REPOS_PATH}/repodata/repomd.xml.asc \
-        ${RPM_REPOS_PATH}/repodata/repomd.xml
+    rm -rf /src/arch/${ARCH_REPOS_PATH}/${SOFTWARE_NAME}/* && \
+    cp -a /src/incoming/arch/ /src/arch/ && \
+    cd /src/arch/${ARCH_REPOS_PATH} && \
+    repo-add isetrepo.db.tar.zst $(find . -name "*.pkg.tar.zst") && \
+    gpg --detach-sign ${SOFTWARE_NAME}/*.pkg.tar.zst

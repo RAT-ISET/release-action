@@ -1,0 +1,30 @@
+name: Release to Repos ( Arch Linux )
+description: Initialize and Update the Repos for Arch Linux
+
+inputs:
+  arch_repos_path:
+    required: true
+  software_name:
+    required: true
+  gpg_key:
+    required: true
+  gpg_key_id:
+    required: true
+
+runs:
+  using: composite
+  
+  steps:
+    - name: Run the Docker
+      shell: bash
+      working-directory: ${{ github.action_path }}
+      env:
+        GPG_KEY: ${{ inputs.gpg_key }}
+        GPG_KEY_ID: ${{ inputs.gpg_key_id }}
+      run: |
+        docker build -f Dockerfile \
+          --secret id=gpg_key,env=GPG_KEY \
+          --secret id=gpg_key_id,env=GPG_KEY_ID \
+          --build-arg ARCH_REPOS_PATH=${{ inputs.arch_repos_path }} \
+          --build-arg SOFTWARE_NAME=${{ inputs.software_name }} \
+          ${{ github.workspace }}
