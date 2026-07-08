@@ -1,0 +1,27 @@
+name: Release to Repos ( Fedora )
+description: Initialize and Update the Repos for Fedora
+
+inputs:
+  rpm_repos_path:
+    required: true
+  gpg_key:
+    required: true
+  gpg_key_id:
+    required: true
+
+runs:
+  using: composite
+  
+  steps:
+    - name: Run the Docker
+      shell: bash
+      working-directory: ${{ github.action_path }}
+      env:
+        GPG_KEY: ${{ inputs.gpg_key }}
+        GPG_KEY_ID: ${{ inputs.gpg_key_id }}
+      run: |
+        docker build -f Dockerfile \
+          --secret id=gpg_key,env=GPG_KEY \
+          --secret id=gpg_key_id,env=GPG_KEY_ID \
+          --build-arg=${{ inputs.rpm_repos_path }} \
+          ${{ github.workspace }}
