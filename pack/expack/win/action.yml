@@ -45,3 +45,4 @@ runs:
           /tr http://timestamp.digicert.com `
           /td SHA256 *.exe
         Remove-Item codesign*
+        Remove-Item intermediate.crt
