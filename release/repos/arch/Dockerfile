@@ -11,7 +11,7 @@ RUN pacman -Syu --noconfirm pacman-contrib
 RUN --mount=type=secret,id=gpg_key \
     --mount=type=secret,id=gpg_key_id \
     --mount=target=/src \
-    mkdir -p work && cp -a /src/arch/* work/ \
+    mkdir -p work && cp -a /src/arch/* work/ && \
     cat /run/secrets/gpg_key | base64 -d > /tmp/private.key && \
     wc -c /tmp/private.key && \
     gpg --batch --import /tmp/private.key && \
