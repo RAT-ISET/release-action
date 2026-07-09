@@ -17,6 +17,7 @@ RUN --mount=type=secret,id=gpg_key \
     gpg --batch --import /tmp/private.key && \
     rm /tmp/private.key && \
     GPG_KEY_ID=$(cat /run/secrets/gpg_key_id) && \
+    tree work && \
     rm -rf work/${ARCH_REPOS_PATH}/${SOFTWARE_NAME}/* && \
     cp -a /src/incoming/arch/* work/ && \
     cd work/${ARCH_REPOS_PATH} && \
