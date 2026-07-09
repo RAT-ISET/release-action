@@ -6,7 +6,7 @@ ARG SOFTWARE_NAME
 
 CMD ["/bin/bash"]
 
-RUN pacman -Syu --noconfirm pacman-contrib
+RUN pacman -Syu --noconfirm pacman-contrib tree
 
 RUN --mount=type=secret,id=gpg_key \
     --mount=type=secret,id=gpg_key_id \
