@@ -6,7 +6,7 @@ ARG SOFTWARE_NAME
 
 CMD ["/bin/bash"]
 
-RUN pacman -S pacman-contrib repo-add
+RUN pacman -Syu --noconfirm pacman-contrib repo-add
 
 RUN --mount=type=secret,id=gpg_key \
     --mount=type=secret,id=gpg_key_id \
