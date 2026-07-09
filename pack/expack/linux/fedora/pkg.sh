@@ -5,7 +5,8 @@ rm -rf build
 
 cmake -S . -B build \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCPACK_DOCKER_GENERATOR=RPM
+    -DCPACK_DOCKER_GENERATOR=RPM \
+    -DPROJECT_FULL_VERSION=$FULL_VERSION
 
 cmake --build build --config Release --target install
 cd build

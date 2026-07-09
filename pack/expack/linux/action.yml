@@ -26,6 +26,7 @@ runs:
         docker build -f Dockerfile \
           --secret id=gpg_key,env=GPG_KEY \
           --secret id=gpg_key_id,env=GPG_KEY_ID \
+          --build-arg FULL_VERSION=$GITHUB_REF_NAME
           --output type=local,dest=${{ inputs.out_path }}/out/dist ${{ github.workspace }}
         rm -rf ${{ github.workspace }}/tmp
 

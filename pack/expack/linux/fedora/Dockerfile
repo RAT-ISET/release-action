@@ -1,6 +1,8 @@
 FROM fedora:latest
 LABEL authors="Rangeset"
 
+ARG VERSION_FULL
+
 CMD ["/bin/bash"]
 
 RUN dnf install -y rpm-build rpm-sign cmake gcc gcc-c++ gnupg2 git && \
@@ -12,7 +14,7 @@ WORKDIR /home/builder
 COPY --chown=builder:builder ./ ./
 COPY --chown=builder:builder ./tmp/pkg.sh ./
 
-RUN bash pkg.sh
+RUN FULL_VERSION=${FULL_VERSION} bash pkg.sh
 
 USER root
 WORKDIR /home/builder/out/dist/
