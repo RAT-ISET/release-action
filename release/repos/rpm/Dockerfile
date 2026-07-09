@@ -11,8 +11,8 @@ RUN --mount=type=secret,id=gpg_key \
     --mount=type=secret,id=gpg_key_id \
     --mount=target=/src \
     mkdir work && \
-    cp -a /src/rpm/* work/ && \
-    cp -a /src/incoming/rpm/* work/ && \
+    cp -a /src/rpm/. work/ && \
+    cp -a /src/incoming/rpm/. work/ && \
     createrepo_c --update work/${RPM_REPOS_PATH} && \
     cat /run/secrets/gpg_key | base64 -d > /tmp/private.key && \
     wc -c /tmp/private.key && \
