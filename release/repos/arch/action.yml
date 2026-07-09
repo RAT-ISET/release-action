@@ -27,4 +27,5 @@ runs:
           --secret id=gpg_key_id,env=GPG_KEY_ID \
           --build-arg ARCH_REPOS_PATH=${{ inputs.arch_repos_path }} \
           --build-arg SOFTWARE_NAME=${{ inputs.software_name }} \
+          --output type=local,dest=${{ github.workspace }}/arch/${{ inputs.arch_repos_path }} \
           ${{ github.workspace }}

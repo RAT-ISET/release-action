@@ -24,4 +24,5 @@ runs:
           --secret id=gpg_key,env=GPG_KEY \
           --secret id=gpg_key_id,env=GPG_KEY_ID \
           --build-arg=${{ inputs.rpm_repos_path }} \
+          --output type=local,dest=${{ github.workspace }}/rpm/${{ inputs.rpm_repos_path }} \
           ${{ github.workspace }}
