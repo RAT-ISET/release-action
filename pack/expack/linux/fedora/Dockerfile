@@ -1,7 +1,7 @@
 FROM fedora:latest
 LABEL authors="Rangeset"
 
-ARG VERSION_FULL
+ARG FULL_VERSION
 
 CMD ["/bin/bash"]
 
